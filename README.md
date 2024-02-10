@@ -9,7 +9,7 @@
 
 ##### **git clone https://github.com/tensorflow/models.git**
 
-### **Step-2: #Add Protobuf File in models/research Folder -Like Add:**
+### **Step-2: #Add Protobuf File (use_protobuf.py) in models/research Folder -And Add:**
 
 >
 >         import os
