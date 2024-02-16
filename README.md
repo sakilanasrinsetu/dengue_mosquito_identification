@@ -32,7 +32,7 @@
 >     python -m pip install .
 >     conda install numpy
 
-Step-6: Checking Everything is ok or not:
+Step-6: Checking Everything is ok or not: in  #  cd /models/research/
    > python object_detection/builders/model_builder_tf2_test.py 
 # Noted that everything from the Research Folder
 
