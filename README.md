@@ -104,29 +104,83 @@ Step-6: Checking Everything is ok or not,  in the   #  cd /models/research/
  python detect_from_image.py -m efficientdet_d0_coco17_tpu-32/saved_model -l labelmap.pbtxt -i test_images/dengue/ ## for my model
     python detect_from_image.py -m training/ -l labelmap.pbtxt -i test_images/dengue/
 
-.........................**** .........................**** ......................... *FIRST STEP DONE*  .........................**** .........................**** .........................
+..............**** ..............**** .............. *FIRST STEP DONE*  ..............**** ..............**** ..............
 
 ---
 
 ---
 
-.........................**** .........................**** ......................... *SECEOND  STEP START*  .........................**** .........................**** .........................
+..............**** ..............**** .............. *SECEOND  STEP START*  ..............**** ..............**** ..............
 
-Doen the 1ST Step
+# Step -10 : Start My Model
 
-Step2.1: Install Requitrment:
-    pip install opencv-contrib-python
+   1. Collect All Image In object_detection/images/ Folder 
+   2. "xml_to_csv.py" file add in object_detection Folder and also run this PY File
 
-Step 2.2: Object Detaiction By Webcam:
-    python detect_from_webcam.py -m ssd_mobilenet_v2_320x320_coco17_tpu-8/saved_model/ -l data/mscoco_label_map.pbtxt
+# Step-11 (Generate TF Recode):
+  1. generate_tfrecord.py File Add In object_detection Folder
 
-    python detect_from_webcam.py -m efficientdet_d0_coco17_tpu-32/saved_model/ -l labelmap.pbtxt
+  2. And those Command
 
-Step 2.3: Object Detaiction By Video:
+    1.python generate_tfrecord.py --csv_input=images/test_labels.csv --image_dir=images/test --output_path=test.record
 
-* *python detect_from_video.py -m ssd_mobilenet_v2_320x320_coco17_tpu-8/saved_model/ -l data/mscoco_label_map.pbtxt -v video/test.mp4*
-* *python detect_from_video.py -m ssd_mobilenet_v2_320x320_coco17_tpu-8/saved_model/ -l data/mscoco_label_map.pbtxt -v video/test.mp4*
-* *python detect_from_video.py -m efficientdet_d0_coco17_tpu-32/saved_model/ -l labelmap.pbtxt -v video/dengue.mp4*
+    2. python generate_tfrecord.py --csv_input=images/train_labels.csv --image_dir=images/train --output_path=train.record
 
-python model_main_tf2.py --pipeline_config_path=ssd_efficientdet_d0_512x512_coco17_tpu-8.config --model_dir=training --alsologtostderr - Working but error
-python model_main_tf2.py --pipeline_config_path=training/ssd_efficientdet_d0_512x512_coco17_tpu-8.config --model_dir=training --alsologtostderr- also workikg with error
+# Step-12: Model Download in object_detection Folder
+
+    1. Add python model_downloader.py In Not Add Previous and Write 
+    ** If Add Before, Then Ignore this Step
+
+        """
+            import wget
+            model_link = "http://download.tensorflow.org/models/object_detection/tf2/20200711/efficientdet_d0_coco17_tpu-32.tar.gz"
+            wget.download(model_link)
+            import tarfile
+            tar = tarfile.open('efficientdet_d0_coco17_tpu-32.tar.gz')
+            tar.extractall('.')
+            tar.close()
+
+        """
+
+        This Code
+
+    2.  Run the model_downloader.py File
+
+# Step-13 (Config File Write):
+    1. object_detection/configs/tf2 Folder find "ssd_efficientdet_d0_512x512_coco17_tpu-8.config" file and copy and Paste in object_detection Folder
+
+    2. Add labelmap.pbtxt  File in object_detection Folder
+
+    3. Re-Write ssd_efficientdet_d0_512x512_coco17_tpu-8.config File
+
+# Step-14 Start Training:
+
+    1.  Add training Folder in object_detection Folder
+        1. Copy
+            1. ssd_efficientdet_d0_512x512_coco17_tpu-8.config
+
+            2. Add labelmap.pbtxt File in object_detection Folder
+
+     *** Note That:  Remember That tensorflow Version Must Be 2.13.0
+    pip install tensorflow==2.13.0 ***
+
+    1. Run this Command
+        python model_main_tf2.py --pipeline_config_path=ssd_efficientdet_d0_512x512_coco17_tpu-8.config --model_dir=training --alsologtostderr
+
+        OR
+        python model_main_tf2.py --pipeline_config_path=training/ssd_efficientdet_d0_512x512_coco17_tpu-8.config --model_dir=training --alsologtostderr
+
+
+# Step-15: Start Detaction (Final Step):
+
+  1.  Run Below Commnad For Image Detaction
+  
+      python detect_from_image.py -m efficientdet_d0_coco17_tpu-32/saved_model -l labelmap.pbtxt -i test_images/lang/
+
+  2.  Run Below Commnad For Image Detaction
+  
+      python detect_from_webcam.py -m efficientdet_d0_coco17_tpu-32/saved_model/ -l labelmap.pbtxt
+
+  3.  Run Below Commnad For Image Detaction
+  
+      python detect_from_video.py -m efficientdet_d0_coco17_tpu-32/saved_model/ -l labelmap.pbtxt -v video/dengue.mp4
