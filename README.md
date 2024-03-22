@@ -54,6 +54,7 @@
 # Step-6: Install Setup File
 
 > python -m pip install .
+
 > conda install numpy
 
 Step-6: Checking Everything is ok or not,  in the   #  cd /models/research/
