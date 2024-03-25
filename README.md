@@ -171,6 +171,8 @@ Step-6: Checking Everything is ok or not,  in the   #  cd /models/research/
         OR
         python model_main_tf2.py --pipeline_config_path=training/ssd_efficientdet_d0_512x512_coco17_tpu-8.config --model_dir=training --alsologtostderr
 
+# Export graph
+    python exporter_main_v2.py --trained_checkpoint_dir=training  --pipeline_config_path=ssd_efficientdet_d0_512x512_coco17_tpu-8.config --output_directory inference_grap
 
 # Step-15: Start Detaction (Final Step):
 
@@ -185,3 +187,4 @@ Step-6: Checking Everything is ok or not,  in the   #  cd /models/research/
   3.  Run Below Commnad For Image Detaction
   
       python detect_from_video.py -m efficientdet_d0_coco17_tpu-32/saved_model/ -l labelmap.pbtxt -v video/dengue.mp4
+      
