@@ -1,3 +1,77 @@
+# Aedes Mosquito Species Classification
+
+A Python and TensorFlow project that classifies mosquito images as **Aedes aegypti**
+or **Aedes albopictus** using MobileNetV2 transfer learning. The trained classifier
+achieved **91.94% accuracy on 720 held-out test images**.
+
+## Demo and results
+
+![Held-out mosquito images with species predictions and model scores](reports/demo_predictions.png)
+
+| Result | Value |
+| --- | ---: |
+| Test accuracy | **91.94%** |
+| Correct test predictions | 662 / 720 |
+| Macro F1 score | 91.94% |
+| Images used | 4,800 |
+| Supported species | 2 |
+
+Demo prediction scores are **98.33% for aegypti** and **94.10% for albopictus**.
+These are individual softmax scores, not overall accuracy or calibrated probabilities.
+
+Read the [full project report](reports/README.md) for the methodology, per-species
+metrics, confusion matrix, training curves, and limitations.
+
+## Setup and training
+
+The Kaggle dataset `pradeepisawasan/aedes-mosquitos` contains species-labeled
+images for `aegypti` and `albopictus`, without bounding boxes. Use the classifier
+below for this dataset. The object detection instructions later in this README
+are a separate workflow requiring bounding-box annotations and a trained detector.
+
+Use Python 3.9 and install the classification dependencies:
+
+```bash
+python3.9 -m venv env
+source env/bin/activate
+pip install -r requirements-classifier.txt
+python download_dataset.py
+```
+
+The full dataset download is approximately 18.9 GB. The download script prints
+its local location. Pass that location to the training script:
+
+```bash
+python train_classifier.py \
+  --data datasets/datasets/pradeepisawasan/aedes-mosquitos/versions/2 \
+  --epochs 5
+```
+
+Training uses a frozen ImageNet MobileNetV2 backbone and learns a two-species
+classification head. The first run downloads the backbone weights. CPU training
+is supported. Resized, padded 224×224 images are cached under `classifier/resized`.
+Three images named `Copy` are excluded. Matching numeric filename IDs, including
+all views and rotations, stay together in stratified 70/15/15 train/validation/test
+splits. The dataset's supplied folder split is replaced because it shares these
+IDs across training and testing. Filename grouping is a precaution; it does not
+establish independence across collection sites or sessions.
+
+The best validation-loss model is saved to `classifier/best.keras`. Class names,
+split membership, test accuracy, and the confusion matrix are saved beside it.
+Run species prediction with:
+
+```bash
+python classify_image.py -i /path/to/mosquito.jpg
+```
+
+Input images should contain a mosquito resembling the training images. This is a
+two-class species classifier: it does not locate insects, reject non-mosquito
+images, or determine whether a mosquito carries dengue. Output scores are model
+scores, not calibrated probabilities. The COCO `labelmap.pbtxt` and EfficientDet
+weights are not used by this classifier.
+
+## Original object detection workflow
+
 ### **Step-1: #For Install Python 3.9**
 
 * > Create Virtual Enviroment* python3 -m venv env

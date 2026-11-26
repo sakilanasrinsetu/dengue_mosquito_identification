@@ -1,5 +1,6 @@
 import numpy as np
 import argparse
+import os
 import tensorflow as tf
 import cv2
 
@@ -84,10 +85,20 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--video_path', type=str, required=True, help='Path to video.')
     args = parser.parse_args()
 
+    if not os.path.isfile(args.video_path):
+        parser.error('Video file does not exist: {}'.format(args.video_path))
+    cap = cv2.VideoCapture(args.video_path)
+    if not cap.isOpened():
+        cap.release()
+        parser.error('Could not open video: {}'.format(args.video_path))
+
     detection_model = load_model(args.model)
     category_index = label_map_util.create_category_index_from_labelmap(args.labelmap, use_display_name=True)
 
-    cap = cv2.VideoCapture(args.video_path)
-    run_inference(detection_model, category_index, cap)
+    try:
+        run_inference(detection_model, category_index, cap)
+    finally:
+        cap.release()
+        cv2.destroyAllWindows()
 
 # python .\detect_from_video.py -m ssd_mobilenet_v2_320x320_coco17_tpu-8\saved_model -l .\data\mscoco_label_map.pbtxt -v .\myVideo.mp4

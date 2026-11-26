@@ -1,0 +1,9 @@
+.venv/
+.python/
+env/
+__pycache__/
+datasets/
+classifier/
+models/
+efficientdet_d0_coco17_tpu-32/
+outputs/

@@ -1,0 +1,20 @@
+[
+  {
+    "image": "datasets/datasets/pradeepisawasan/aedes-mosquitos/versions/2/aegypti/aegypti/aegypti_0/aegypti64a.jpg",
+    "true_species": "aegypti",
+    "predicted_species": "aegypti",
+    "scores": {
+      "aegypti": 0.9832661151885986,
+      "albopictus": 0.016733935102820396
+    }
+  },
+  {
+    "image": "datasets/datasets/pradeepisawasan/aedes-mosquitos/versions/2/albopictus/albopictus/albopictus_0/albopictus75b.jpg",
+    "true_species": "albopictus",
+    "predicted_species": "albopictus",
+    "scores": {
+      "aegypti": 0.05898948386311531,
+      "albopictus": 0.9410104751586914
+    }
+  }
+]
