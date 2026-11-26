@@ -15,21 +15,21 @@ and KaggleHub. Training and inference support CPU execution.
 
 Dataset: [Aedes Mosquitos on Kaggle](https://www.kaggle.com/datasets/pradeepisawasan/aedes-mosquitos).
 
-| Species | Original images |
-| --- | ---: |
-| Aedes aegypti | 2,403 |
-| Aedes albopictus | 2,400 |
-| Total | 4,803 |
+| Species          | Original images |
+| ---------------- | --------------: |
+| Aedes aegypti    |           2,403 |
+| Aedes albopictus |           2,400 |
+| Total            |           4,803 |
 
 Three images explicitly named `Copy` were excluded, leaving **4,800 images**.
 Images were converted to RGB, resized with padding to **224 × 224 pixels**, and
 cached for reuse. Pixel values were rescaled to **[-1, 1]** within the model.
 
-| Split | Aegypti | Albopictus | Total |
-| --- | ---: | ---: | ---: |
-| Training | 1,696 | 1,664 | 3,360 |
-| Validation | 352 | 368 | 720 |
-| Test | 352 | 368 | 720 |
+| Split      | Aegypti | Albopictus | Total |
+| ---------- | ------: | ---------: | ----: |
+| Training   |   1,696 |      1,664 | 3,360 |
+| Validation |     352 |        368 |   720 |
+| Test       |     352 |        368 |   720 |
 
 The split is approximately 70% training, 15% validation, and 15% testing, using
 seed **42**. Matching numeric filename IDs stay together, including all associated
@@ -50,14 +50,14 @@ RGB image (224 × 224 × 3)
     → Aegypti / Albopictus
 ```
 
-| Training setting | Value |
-| --- | --- |
-| Epochs | 5 |
-| Batch size | 32 |
-| Optimizer | Adam |
-| Learning rate | 0.001 |
-| Loss | Sparse categorical cross-entropy |
-| Model selection | Lowest validation loss |
+| Training setting | Value                            |
+| ---------------- | -------------------------------- |
+| Epochs           | 5                                |
+| Batch size       | 32                               |
+| Optimizer        | Adam                             |
+| Learning rate    | 0.001                            |
+| Loss             | Sparse categorical cross-entropy |
+| Model selection  | Lowest validation loss           |
 
 Only the classification head was trained; the backbone weights remained frozen.
 The best checkpoint is saved as `classifier/best.keras` with class names in
@@ -70,10 +70,10 @@ The best checkpoint is saved as `classifier/best.keras` with class names in
 The examples are the first non-rotated held-out image from each class, selected
 without filtering by prediction score.
 
-| Demo image | True species | Predicted species | Predicted species score |
-| --- | --- | --- | ---: |
-| `aegypti64a.jpg` | Aedes aegypti | Aedes aegypti | **98.33%** |
-| `albopictus75b.jpg` | Aedes albopictus | Aedes albopictus | **94.10%** |
+| Demo image            | True species     | Predicted species | Predicted species score |
+| --------------------- | ---------------- | ----------------- | ----------------------: |
+| `aegypti64a.jpg`    | Aedes aegypti    | Aedes aegypti     |        **98.33%** |
+| `albopictus75b.jpg` | Aedes albopictus | Aedes albopictus  |        **94.10%** |
 
 Percentages in this table are individual **softmax model scores**, not calibrated
 probabilities or measures of overall test accuracy. Full demo scores and source
@@ -83,35 +83,35 @@ image paths are recorded in [demo_predictions.json](demo_predictions.json).
 
 The selected model was evaluated on the separate 720-image test set.
 
-| Metric | Result |
-| --- | ---: |
-| Test accuracy | **91.94%** |
-| Correct predictions | **662 / 720** |
-| Incorrect predictions | 58 / 720 |
-| Macro precision | 91.95% |
-| Macro recall | 91.93% |
-| Macro F1 score | 91.94% |
-| Test loss | 0.2460 |
-| Final training accuracy | 93.18% |
-| Selected-checkpoint validation accuracy | 89.44% |
+| Metric                                  |              Result |
+| --------------------------------------- | ------------------: |
+| Test accuracy                           |    **91.94%** |
+| Correct predictions                     | **662 / 720** |
+| Incorrect predictions                   |            58 / 720 |
+| Macro precision                         |              91.95% |
+| Macro recall                            |              91.93% |
+| Macro F1 score                          |              91.94% |
+| Test loss                               |              0.2460 |
+| Final training accuracy                 |              93.18% |
+| Selected-checkpoint validation accuracy |              89.44% |
 
 Checkpoint selection used validation **loss**, rather than validation accuracy.
 Precision, recall, and F1 below are calculated from the saved test confusion matrix.
 Macro averages give both species equal weight.
 
-| Species | Precision | Recall | F1 score | Test images |
-| --- | ---: | ---: | ---: | ---: |
-| Aedes aegypti | 92.24% | 91.19% | 91.71% | 352 |
-| Aedes albopictus | 91.67% | 92.66% | 92.16% | 368 |
+| Species          | Precision | Recall | F1 score | Test images |
+| ---------------- | --------: | -----: | -------: | ----------: |
+| Aedes aegypti    |    92.24% | 91.19% |   91.71% |         352 |
+| Aedes albopictus |    91.67% | 92.66% |   92.16% |         368 |
 
 ### Confusion matrix
 
 Rows represent true species; columns represent predicted species.
 
-| True species | Predicted aegypti | Predicted albopictus |
-| --- | ---: | ---: |
-| Aedes aegypti | **321** | 31 |
-| Aedes albopictus | 27 | **341** |
+| True species     | Predicted aegypti | Predicted albopictus |
+| ---------------- | ----------------: | -------------------: |
+| Aedes aegypti    |     **321** |                   31 |
+| Aedes albopictus |                27 |        **341** |
 
 ![Test confusion matrix and training and validation accuracy across five epochs](evaluation.png)
 
@@ -162,7 +162,7 @@ species, draw bounding boxes, or determine whether a mosquito carries dengue.
 The earlier EfficientDet COCO scripts are a separate detection workflow and do
 not use this species classifier.
 
-## CV project description
+## Project description
 
 **Aedes Mosquito Species Classification — Python, TensorFlow, Computer Vision**
 
@@ -173,18 +173,18 @@ and rotations together.
 
 ## Files and evidence
 
-| File | Purpose |
-| --- | --- |
-| [train_classifier.py](../train_classifier.py) | Preparation, grouped splits, training, and evaluation |
-| [classify_image.py](../classify_image.py) | Species prediction for one image |
-| [requirements-classifier.txt](../requirements-classifier.txt) | Classification dependencies |
-| `classifier/best.keras` | Locally saved trained model |
-| `classifier/metrics.json` | Saved evaluation results and training history |
-| `classifier/splits.json` | Local split membership and filename groups |
-| [demo_predictions.json](demo_predictions.json) | Recorded demo predictions |
-| [demo_predictions.png](demo_predictions.png) | Illustrated demo |
-| [evaluation.png](evaluation.png) | Confusion matrix and learning curves |
-| [Word report](Aedes_Species_Classification_Report.pdf.docx) | Existing editable report |
+| File                                                         | Purpose                                               |
+| ------------------------------------------------------------ | ----------------------------------------------------- |
+| [train_classifier.py](../train_classifier.py)                 | Preparation, grouped splits, training, and evaluation |
+| [classify_image.py](../classify_image.py)                     | Species prediction for one image                      |
+| [requirements-classifier.txt](../requirements-classifier.txt) | Classification dependencies                           |
+| `classifier/best.keras`                                    | Locally saved trained model                           |
+| `classifier/metrics.json`                                  | Saved evaluation results and training history         |
+| `classifier/splits.json`                                   | Local split membership and filename groups            |
+| [demo_predictions.json](demo_predictions.json)                | Recorded demo predictions                             |
+| [demo_predictions.png](demo_predictions.png)                  | Illustrated demo                                      |
+| [evaluation.png](evaluation.png)                              | Confusion matrix and learning curves                  |
+| [Word report](Aedes_Species_Classification_Report.pdf.docx)   | Existing editable report                              |
 
 Model weights, cached datasets, and training artifacts under `classifier/` are
 excluded from Git by the project's `.gitignore`.
